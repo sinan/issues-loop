@@ -1,0 +1,9 @@
+# for instructions see ./readme.md
+# This file is the owner's. Agents: file discoveries in ./issues-agent.yaml instead.
+- id: 1
+  title: "example: replace this entry with your first real issue"
+  description: >-
+    this is what an entry looks like. the title is one quoted line; the description is a folded
+    block scalar indented four spaces and wrapped at 100 columns. say what is wrong or wanted,
+    where in the code it lives, and how to tell when it is done. delete this entry when you file
+    your first real one (python scripts/issues.py remove 1).

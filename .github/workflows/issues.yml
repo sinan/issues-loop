@@ -1,0 +1,15 @@
+# Validates the issue ledger on every push and PR: unique ids, ids in the right file,
+# titles present, descriptions as folded blocks. Cheap, dependency-free, catches the
+# "a regex ate half the file" class of accident before it lands.
+name: issues
+on: [push, pull_request]
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+      - run: pip install pyyaml
+      - run: python scripts/issues.py validate

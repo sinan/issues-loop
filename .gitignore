@@ -1,0 +1,4 @@
+.DS_Store
+__pycache__/
+# agent worktrees: full repo copies that live only until their branch merges
+.claude/worktrees/

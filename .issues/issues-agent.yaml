@@ -1,0 +1,3 @@
+# for instructions see ./readme.md
+# AGENT-FILED ledger. Ids carry the "-agent" suffix. The owner's own entries live in
+# ./issues.yaml with plain numeric ids. Claim the next id at the moment you append.
