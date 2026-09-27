@@ -4,9 +4,11 @@
 #   bash adopt.sh /path/to/your/project
 #
 # Copies the ledger, the scripts, the handoff folder and the CI check into the target.
+# Agent-to-agent handoffs come from the `handoff` plugin, installed once per machine.
 # Never overwrites a file that already exists (prints SKIP instead). If the target has
-# no CLAUDE.md, the template is copied; if it has one, the "Issue Workflow" and
-# "Key Conventions" sections are appended for you to merge by hand.
+# no CLAUDE.md, the template is copied; if it has one, the "Issue Workflow", "Agent Handoffs"
+# and "Key Conventions" sections are appended for you to merge by hand. A CLAUDE.md that
+# already has the workflow but predates agent handoffs gets only the "Agent Handoffs" section.
 
 set -euo pipefail
 SRC="$(cd "$(dirname "$0")" && pwd)"
@@ -37,9 +39,13 @@ done
 if [[ -e "$DST/CLAUDE.md" ]]; then
     if grep -q "^## Issue Workflow" "$DST/CLAUDE.md"; then
         echo "  SKIP  CLAUDE.md already has an Issue Workflow section"
+        if ! grep -q "^## Agent Handoffs" "$DST/CLAUDE.md"; then
+            { echo ""; sed -n '/^## Agent Handoffs/,/^## Key Conventions/p' "$SRC/CLAUDE.md" | sed '$d'; } >> "$DST/CLAUDE.md"
+            echo "  APPEND CLAUDE.md (Agent Handoffs section; merge by hand)"
+        fi
     else
         { echo ""; sed -n '/^## Issue Workflow/,/^## State + next steps/p' "$SRC/CLAUDE.md" | sed '$d'; } >> "$DST/CLAUDE.md"
-        echo "  APPEND CLAUDE.md (Issue Workflow + Key Conventions sections; merge by hand)"
+        echo "  APPEND CLAUDE.md (Issue Workflow + Agent Handoffs + Key Conventions sections; merge by hand)"
     fi
 else
     copy CLAUDE.md
@@ -58,4 +64,7 @@ echo "       or an .xcodeproj) — scripts/release.sh auto-detects it."
 echo "    3. gh auth status   (release.sh and the workflow use the GitHub CLI)"
 echo "    4. python scripts/issues.py remove 1   # drop the example entry, then file your first issue"
 echo "    5. Commit, then tell Claude: \"take care of issue 1\""
+echo "    6. Once per machine, for agent-to-agent handoffs (see docs/handoff/readme.md):"
+echo "         claude plugin marketplace add sinan/issues-loop"
+echo "         claude plugin install handoff@issues-loop"
 echo ""

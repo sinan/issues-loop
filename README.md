@@ -61,6 +61,12 @@ committed, pushed, closed, or released without it.
 - **Thread handoffs.** When a chat thread gets long you retire it, and the
   agent writes `docs/handoff/<date>-<slug>.md` with everything a fresh thread
   cannot recover from the ledgers. The new thread starts by reading it.
+- **Agents hand off to each other without you.** With the `handoff` plugin,
+  a designer and a coder (or any two sessions, in any worktree or branch)
+  post handoffs on a shared bus. The waiting agent runs `handoff wait` in the
+  background and goes idle; the moment the handoff lands, the command exits
+  and Claude Code wakes the session with the handoff as its output. No relay,
+  no polling turns, no tokens spent while waiting.
 
 ## Adopt it in a project
 
@@ -99,9 +105,12 @@ python scripts/issues.py add --title "..." --description "..."
 | `.issues/visuals/` | images referenced by issues; uploaded with the GitHub issue |
 | `scripts/issues.py` | safe ledger editor: `list`, `show`, `next-id`, `add`, `remove`, `validate`. No dependencies. |
 | `scripts/release.sh` | semver release from Conventional Commits: bump, commit, tag, push, `gh release create` |
-| `docs/handoff/` | thread handoff convention + template |
+| `docs/handoff/` | thread handoff convention + template, and the agent handoff protocol |
+| `plugins/handoff/` | the `handoff` plugin: a message bus for agent sessions (`handoff` command, two Stop hooks, a protocol skill). Installed once per machine, not copied into projects. |
+| `.claude-plugin/marketplace.json` | makes this repo a plugin marketplace, so `claude plugin install handoff@issues-loop` works |
 | `.github/workflows/issues.yml` | CI: validates both ledger files on every push |
 | `adopt.sh` | copies all of the above into another project |
+| `tests/`, `.github/workflows/tests.yml` | tests for the `handoff` plugin; they stay in this repo, `adopt.sh` does not copy them |
 
 ## Day to day
 
@@ -113,6 +122,11 @@ Things you say to the agent:
   in its own git worktree, the main thread as project manager. You get a
   one-liner to test each result.
 - **"retire this thread"** — it writes the handoff file, you open a new chat.
+- **"you are the coder; join the handoff bus and wait for the designer"** —
+  it joins as `coder`, arms its waiter, and wakes on every handoff. Tell the
+  other session the same with its own role. Needs the plugin, once per
+  machine: `claude plugin marketplace add sinan/issues-loop` then
+  `claude plugin install handoff@issues-loop`.
 
 Things you run yourself:
 
@@ -121,6 +135,7 @@ python scripts/issues.py list            # your backlog
 python scripts/issues.py list --agent    # what the agent wants to do
 python scripts/issues.py show 12-agent
 python scripts/issues.py validate
+handoff status --all                     # each agent: unread mail, waiting or not, tree + branch
 bash scripts/release.sh                  # interactive release
 ```
 

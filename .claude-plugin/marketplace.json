@@ -1,0 +1,17 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "issues-loop",
+  "description": "Plugins that ship with the issues-loop workflow.",
+  "owner": {
+    "name": "Sinan Yasar",
+    "url": "https://github.com/sinan"
+  },
+  "plugins": [
+    {
+      "name": "handoff",
+      "description": "A message bus for agent sessions: post a handoff, and the agent it is for wakes up, in any worktree or branch.",
+      "source": "./plugins/handoff",
+      "category": "productivity"
+    }
+  ]
+}

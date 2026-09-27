@@ -1,0 +1,34 @@
+{
+  "description": "handoff: hand over mail that lands mid-turn (stop), wake an idle agent when its mail lands (idle), and retire that idle waiter when a new turn starts (busy). Silent for sessions that never ran `handoff join`.",
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/bin/handoff\"; [ -f \"$f\" ] || exit 0; exec python3 \"$f\" hook stop",
+            "timeout": 15
+          },
+          {
+            "type": "command",
+            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/bin/handoff\"; [ -f \"$f\" ] || exit 0; exec python3 \"$f\" hook idle",
+            "async": true,
+            "asyncRewake": true,
+            "timeout": 86400
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "f=\"${CLAUDE_PLUGIN_ROOT}/bin/handoff\"; [ -f \"$f\" ] || exit 0; exec python3 \"$f\" hook busy",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

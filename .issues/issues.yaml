@@ -7,3 +7,14 @@
     block scalar indented four spaces and wrapped at 100 columns. say what is wrong or wanted,
     where in the code it lives, and how to tell when it is done. delete this entry when you file
     your first real one (python scripts/issues.py remove 1).
+- id: 3
+  title: "publish the handoff plugin so any Claude Code user can install it"
+  description: >-
+    The handoff plugin (plugins/handoff, from ledger issue 2) works for the owner but is not ready
+    for strangers. Make it publishable: a standalone README aimed at any Claude Code user (what it
+    does, install, a two-session quickstart, the protocol, limits), license and versioning, no
+    issues-loop-specific wording in the plugin itself, a decision on where it lives (the issues-loop
+    marketplace, its own repo like sinan/hemingway, and/or a listing in a public plugin directory),
+    a check that it works on Linux and fails safe elsewhere, and a safety pass on the hooks that now
+    run in every session of every user who installs it. Done when a stranger can run two commands to
+    install it from GitHub, follow the README, and watch two sessions hand work back and forth.

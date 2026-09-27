@@ -1,0 +1,13 @@
+{
+  "name": "handoff",
+  "description": "A message bus for Claude Code agent sessions. One agent posts a handoff; the agent it is for wakes up, in any worktree or branch. No relay, no tokens spent while waiting.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Sinan Yasar",
+    "url": "https://github.com/sinan"
+  },
+  "homepage": "https://github.com/sinan/issues-loop",
+  "repository": "https://github.com/sinan/issues-loop",
+  "license": "MIT",
+  "keywords": ["agents", "handoff", "multi-agent", "message-bus", "worktrees", "hooks"]
+}

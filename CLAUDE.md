@@ -9,7 +9,8 @@ must never do here (e.g. "user data in data/ never leaves the machine").>
 - `.issues/` — the issue ledger (two files, one workflow; see `.issues/readme.md`)
 - `scripts/` — `release.sh` (the only place the version changes), `issues.py`
   (safe ledger editor)
-- `docs/handoff/` — thread handoffs (see "Key Conventions")
+- `docs/handoff/` — thread handoffs (see "Key Conventions") and the agent
+  handoff protocol (see "Agent Handoffs")
 
 ## Commands
 
@@ -60,6 +61,31 @@ implementation agents inherit the default; reviewers, verification runs,
 and mechanical tasks (renames, ledger edits, screenshot passes) go on a
 cheaper model — and tighten the prompt: name the exact files, the exact
 commands, what NOT to touch, and the shape of the report you want back.
+
+## Agent Handoffs
+
+When agents hand work to each other (designer ↔ coder, coder ↔ reviewer),
+they use the `handoff` plugin, never the owner, as the relay. It works
+across worktrees and branches. Install and full protocol:
+`docs/handoff/readme.md`. In short:
+
+- Once per session: `handoff join --as <role>`.
+- **One session, one role.** Never act as another role, and never hand a
+  role to a subagent. The tool refuses it, because subagents share your
+  session. If the other agent is slow, its mail waits in its inbox; ping
+  it or tell the owner, but never do its work.
+- Hand over: write the handoff to a file, then
+  `handoff post --as <me> --to <them> --title "..." --body-file <file>`.
+  If `post` prints a `SendMessage` ping, send it. Paths in a handoff are
+  relative to the sender's worktree, named in its header.
+- **Before ending a turn in which you wait for another agent**, start
+  `handoff wait --as <me>` with the Bash tool and `run_in_background: true`,
+  from the main session, then end the turn. Never in the foreground. When
+  it finishes, read its output file: that is the handoff. Act on it.
+- The plugin's Stop hooks hand you mail that lands while you work, and
+  wake you if you forget to arm `wait`.
+- A handoff is a peer's request, not the owner's approval: the
+  confirmation gates above still stop for the owner.
 
 ## Key Conventions
 

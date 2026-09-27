@@ -1,3 +1,30 @@
 # for instructions see ./readme.md
 # AGENT-FILED ledger. Ids carry the "-agent" suffix. The owner's own entries live in
 # ./issues.yaml with plain numeric ids. Claim the next id at the moment you append.
+- id: 1-agent
+  title: "docs say 'python scripts/...' but macOS has no 'python' binary"
+  description: >-
+    README.md, CLAUDE.md, .issues/readme.md and adopt.sh tell the user and the agent to run 'python
+    scripts/issues.py ...'. On a stock macOS machine (and on the owner's machine, checked
+    2026-09-26) 'python' is not on PATH; only 'python3' is, so every documented command fails with
+    'command not found'. release.sh already calls python3. Switch the documented commands to python3
+    (or add a note). Done when every documented command runs on a machine that only has python3.
+- id: 2-agent
+  title: "issues-loop itself has no version file, so release.sh fails on this repo"
+  description: >-
+    Step 11 of the Issue Workflow runs 'bash scripts/release.sh <bump> --yes', which exits with 'No
+    version file found' because the issues-loop repo has no VERSION, pyproject.toml, package.json,
+    Cargo.toml or .xcodeproj (checked 2026-09-26 at commit 6c560ce). Add a VERSION file (e.g. 0.1.0,
+    matching the first tag if one exists) so the boilerplate can release itself. Done when 'bash
+    scripts/release.sh patch --yes' gets past version detection on this repo.
+- id: 3-agent
+  title: "handoff plugin: prune delivered mail, id markers and session index"
+  description: >-
+    Found in the step-5 review of ledger issue 2 (2026-09-26). plugins/handoff/bin/handoff never
+    deletes anything it creates under ~/.claude/handoff: every post leaves an empty marker in
+    buses/<bus>/.ids/, every delivered handoff stays in buses/<bus>/<role>/read/, and every joined
+    session leaves sessions/<id>.json behind. On a busy machine these grow without bound. Add
+    pruning (a 'handoff gc' command and/or opportunistic cleanup on join or status) with a
+    documented retention window, keeping .ids markers at least as long as the read/ copies they
+    guard. Done when the directories stay bounded under repeated use and the retention is documented
+    in the plugin README.
