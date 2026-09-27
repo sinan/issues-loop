@@ -9,14 +9,3 @@
     2026-09-26) 'python' is not on PATH; only 'python3' is, so every documented command fails with
     'command not found'. release.sh already calls python3. Switch the documented commands to python3
     (or add a note). Done when every documented command runs on a machine that only has python3.
-- id: 3-agent
-  title: "handoff plugin: prune delivered mail, id markers and session index"
-  description: >-
-    Found in the step-5 review of ledger issue 2 (2026-09-26). plugins/handoff/bin/handoff never
-    deletes anything it creates under ~/.claude/handoff: every post leaves an empty marker in
-    buses/<bus>/.ids/, every delivered handoff stays in buses/<bus>/<role>/read/, and every joined
-    session leaves sessions/<id>.json behind. On a busy machine these grow without bound. Add
-    pruning (a 'handoff gc' command and/or opportunistic cleanup on join or status) with a
-    documented retention window, keeping .ids markers at least as long as the read/ copies they
-    guard. Done when the directories stay bounded under repeated use and the retention is documented
-    in the plugin README.

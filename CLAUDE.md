@@ -65,9 +65,9 @@ commands, what NOT to touch, and the shape of the report you want back.
 ## Agent Handoffs
 
 When agents hand work to each other (designer ↔ coder, coder ↔ reviewer),
-they use the `handoff` plugin, never the owner, as the relay. It works
-across worktrees and branches. Install and full protocol:
-`docs/handoff/readme.md`. In short:
+they use the `handoff` plugin (github.com/sinan/claude-handoff), never the
+owner, as the relay. It works across worktrees and branches. Install and
+protocol: `docs/handoff/readme.md`. In short:
 
 - Once per session: `handoff join --as <role>`.
 - **One session, one role.** Never act as another role, and never hand a

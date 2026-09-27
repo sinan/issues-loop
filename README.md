@@ -61,7 +61,8 @@ committed, pushed, closed, or released without it.
 - **Thread handoffs.** When a chat thread gets long you retire it, and the
   agent writes `docs/handoff/<date>-<slug>.md` with everything a fresh thread
   cannot recover from the ledgers. The new thread starts by reading it.
-- **Agents hand off to each other without you.** With the `handoff` plugin,
+- **Agents hand off to each other without you.** With the
+  [`handoff` plugin](https://github.com/sinan/claude-handoff),
   a designer and a coder (or any two sessions, in any worktree or branch)
   post handoffs on a shared bus. The waiting agent runs `handoff wait` in the
   background and goes idle; the moment the handoff lands, the command exits
@@ -106,11 +107,9 @@ python scripts/issues.py add --title "..." --description "..."
 | `scripts/issues.py` | safe ledger editor: `list`, `show`, `next-id`, `add`, `remove`, `validate`. No dependencies. |
 | `scripts/release.sh` | semver release from Conventional Commits: bump, commit, tag, push, `gh release create` |
 | `docs/handoff/` | thread handoff convention + template, and the agent handoff protocol |
-| `plugins/handoff/` | the `handoff` plugin: a message bus for agent sessions (`handoff` command, two Stop hooks, a protocol skill). Installed once per machine, not copied into projects. |
-| `.claude-plugin/marketplace.json` | makes this repo a plugin marketplace, so `claude plugin install handoff@issues-loop` works |
+| `.claude-plugin/marketplace.json` | lists the [`handoff` plugin](https://github.com/sinan/claude-handoff) (it lives in its own repo), so `claude plugin install handoff@issues-loop` also works |
 | `.github/workflows/issues.yml` | CI: validates both ledger files on every push |
 | `adopt.sh` | copies all of the above into another project |
-| `tests/`, `.github/workflows/tests.yml` | tests for the `handoff` plugin; they stay in this repo, `adopt.sh` does not copy them |
 
 ## Day to day
 
@@ -125,8 +124,8 @@ Things you say to the agent:
 - **"you are the coder; join the handoff bus and wait for the designer"** —
   it joins as `coder`, arms its waiter, and wakes on every handoff. Tell the
   other session the same with its own role. Needs the plugin, once per
-  machine: `claude plugin marketplace add sinan/issues-loop` then
-  `claude plugin install handoff@issues-loop`.
+  machine: `claude plugin marketplace add sinan/claude-handoff` then
+  `claude plugin install handoff@claude-handoff`.
 
 Things you run yourself:
 
