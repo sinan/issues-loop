@@ -9,14 +9,6 @@
     2026-09-26) 'python' is not on PATH; only 'python3' is, so every documented command fails with
     'command not found'. release.sh already calls python3. Switch the documented commands to python3
     (or add a note). Done when every documented command runs on a machine that only has python3.
-- id: 2-agent
-  title: "issues-loop itself has no version file, so release.sh fails on this repo"
-  description: >-
-    Step 11 of the Issue Workflow runs 'bash scripts/release.sh <bump> --yes', which exits with 'No
-    version file found' because the issues-loop repo has no VERSION, pyproject.toml, package.json,
-    Cargo.toml or .xcodeproj (checked 2026-09-26 at commit 6c560ce). Add a VERSION file (e.g. 0.1.0,
-    matching the first tag if one exists) so the boilerplate can release itself. Done when 'bash
-    scripts/release.sh patch --yes' gets past version detection on this repo.
 - id: 3-agent
   title: "handoff plugin: prune delivered mail, id markers and session index"
   description: >-
